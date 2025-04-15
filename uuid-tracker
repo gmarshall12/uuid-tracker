@@ -1,4 +1,4 @@
-(function() {
+(function () {
   function getOrCreateUUID() {
     const key = 'visitor_uuid';
     let uuid = localStorage.getItem(key);
@@ -16,20 +16,20 @@
   // Store UUID globally
   window.visitorUUID = getOrCreateUUID();
 
-  // Append to all outbound links that lead to vendor domains
+  // Append to outbound vendor links only
   document.addEventListener('DOMContentLoaded', () => {
-    const vendorDomains = ['thrivelab.com', 'examplevendor.com']; // Add your vendor domains here
+    const vendorDomains = ['thrivelab.com', 'know.us', 'personanutrition.com'];
     const links = document.querySelectorAll('a[href]');
 
     links.forEach(link => {
       try {
-        const url = new URL(link.href);
+        const url = new URL(link.href, window.location.origin);
         if (vendorDomains.includes(url.hostname)) {
           url.searchParams.set('ref_id', window.visitorUUID);
           link.href = url.toString();
         }
       } catch (e) {
-        // skip invalid URLs
+        // Invalid or relative URLs (e.g. anchors or malformed hrefs)
       }
     });
   });
