@@ -18,6 +18,8 @@
 
   // Append to outbound vendor links only
   document.addEventListener('DOMContentLoaded', () => {
+    console.log('UUID script loaded'); // ✅ ADD THIS LINE HERE
+
     const vendorDomains = ['thrivelab.com', 'know.us', 'personanutrition.com'];
     const links = document.querySelectorAll('a[href]');
 
