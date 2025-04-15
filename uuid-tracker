@@ -13,17 +13,24 @@
     return uuid;
   }
 
-  // Store the UUID globally for use in links
+  // Store UUID globally
   window.visitorUUID = getOrCreateUUID();
 
-  // OPTIONAL: Append UUID to specific outbound links
+  // Append to all outbound links that lead to vendor domains
   document.addEventListener('DOMContentLoaded', () => {
-    const links = document.querySelectorAll('a[data-track-uuid="true"]');
+    const vendorDomains = ['thrivelab.com', 'examplevendor.com']; // Add your vendor domains here
+    const links = document.querySelectorAll('a[href]');
 
     links.forEach(link => {
-      const url = new URL(link.href);
-      url.searchParams.set('ref_id', window.visitorUUID);
-      link.href = url.toString();
+      try {
+        const url = new URL(link.href);
+        if (vendorDomains.includes(url.hostname)) {
+          url.searchParams.set('ref_id', window.visitorUUID);
+          link.href = url.toString();
+        }
+      } catch (e) {
+        // skip invalid URLs
+      }
     });
   });
 })();
